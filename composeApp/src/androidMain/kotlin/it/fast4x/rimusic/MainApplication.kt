@@ -39,6 +39,9 @@ class MainApplication : Application(), SingletonImageLoader.Factory {
 
         Thread.setDefaultUncaughtExceptionHandler( CrashHandler(this) )
 
+        // Music+: the customer's "only male singers" choice, from KosherSafe on this phone
+        app.kreate.android.utils.MenOnly.init( this )
+
         val koinLogger = KoinBufferedLogger()
         initKoin {
             logger( koinLogger )

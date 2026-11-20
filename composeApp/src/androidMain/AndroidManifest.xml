@@ -31,6 +31,8 @@
     <uses-feature    android:name="android.hardware.microphone" android:required="false" />
 
     <queries>
+        <!-- Music+: KosherSafe tells us the customer's "only male singers" choice -->
+        <package android:name="com.kosherphone.app" />
         <intent>
             <action android:name="android.media.action.DISPLAY_AUDIO_EFFECT_CONTROL_PANEL" />
         </intent>

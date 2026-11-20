@@ -18,14 +18,15 @@
     <string name="playlists_you_might_like">רשימות השמעה שאולי תאהבו</string>
     <string name="an_error_has_occurred">אירעה שגיאה</string>
     <string name="albums">אלבומים</string>
-    <string name="artists">אומנים</string>
+    <string name="artists">זמרים</string>
     <string name="enter_the_playlist_name">הזינו שם לרשימת השמעה</string>
-    <string name="playlists">רשימות השמעה</string>
-    <string name="favorites">מועדפים</string>
-    <string name="quick_picks">בחירות מהירות</string>
+    <string name="playlists">רשימות</string>
+    <string name="favorites">אהובים</string>
+    <string name="quick_picks">בית</string>
     <string name="songs">שירים</string>
     <string name="enqueue">הבא בתור</string>
     <string name="shuffle">ערבוב</string>
+    <string name="musicplus_play_all">נגן הכל</string>
     <string name="from_wikipedia_cca">מוויקיפדיה תחת Creative Commons Attribution CC-BY-SA 3.0</string>
     <string name="library">ספריה</string>
     <string name="dialog_title_delete_playlist">האם אתה באמת רוצה למחוק את הפלייליסט הזה?</string>
@@ -39,7 +40,7 @@
     <string name="id">מזהה</string>
     <string name="bitrate">קצב סיביות</string>
     <string name="size">גודל</string>
-    <string name="cached">שמור במטמון</string>
+    <string name="cached">נשמרו בטלפון</string>
     <string name="loudness">עוצמה</string>
     <string name="clear">נקה</string>
     <string name="online">מקוון</string>
@@ -135,7 +136,7 @@
     <string name="system">מערכת</string>
     <string name="unlimited">ללא הגבלה</string>
     <string name="_light">בהיר</string>
-    <string name="downloaded">ירד</string>
+    <string name="downloaded">הורדות</string>
     <string name="download">הורדה</string>
     <string name="_default">ברירת מחדל</string>
     <string name="dynamic">דינמי</string>

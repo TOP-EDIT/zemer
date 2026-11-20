@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Properties
 
-val APP_NAME = "Zemer"
+val APP_NAME = "MusicPlus"
 
 private fun String.sha256(): String {
     val digest = MessageDigest.getInstance( "SHA-256" )
@@ -341,7 +341,7 @@ android {
 
             // App's properties
             versionName = libs.versions.versionName.get()
-            manifestPlaceholders["appName"] = "זמר"
+            manifestPlaceholders["appName"] = "Music+"
             versionCode = vCode
         }
         //</editor-fold>

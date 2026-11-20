@@ -296,6 +296,7 @@ object SongItem: Visual() {
         isLiked: Boolean = false,
         showThumbnail: Boolean = true,
         sizeDp: DpSize = thumbnailSize(),
+        label: String? = null, // Music+: artist name for the colored letter tile
         thumbnailOverlay: @Composable BoxScope.() -> Unit = {}
     ) =
         Thumbnail(
@@ -304,7 +305,8 @@ object SongItem: Visual() {
             showThumbnail = showThumbnail,
             contentScale = ContentScale.FillHeight,
             sizeDp = sizeDp,
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
+            label = label
         ) {
             if( isPlaying )
                 MusicAnimation(
@@ -314,7 +316,7 @@ object SongItem: Visual() {
 
             thumbnailOverlay()
 
-            if( isLiked )
+            if( false && isLiked ) // Music+: no heart on every tile (less clutter); liking stays in the player
                 Icon(
                     painter = Preferences.LIKE_ICON.value.likedIcon,
                     contentDescription = null,
@@ -421,11 +423,15 @@ object SongItem: Visual() {
         thumbnailOverlay: @Composable BoxScope.() -> Unit = {},
         onClick: () -> Unit = {}
     ) {
+        // Music+: on a "men only" phone, a female singer's song is not shown at all
+        if( app.kreate.android.utils.MenOnly.blocked( song.cleanTitle(), song.cleanArtistsText() ) ) return
+
         Structure(
             thumbnail = {
                 Thumbnail(
                     showThumbnail = showThumbnail,
                     thumbnailUrl = song.cleanThumbnailUrl(),
+                    label = song.cleanArtistsText().ifBlank { song.cleanTitle() },
                     isLiked = song.likedAt != null,
                     isPlaying = isPlaying,
                     values = values,
@@ -605,6 +611,7 @@ object SongItem: Visual() {
             Thumbnail(
                 showThumbnail = showThumbnail,
                 thumbnailUrl = innertubeVideo.thumbnail?.url,
+                label = innertubeVideo.authors?.firstOrNull()?.name.orEmpty(),
                 isPlaying = isPlaying,
                 values = values,
                 sizeDp = thumbnailSizeDp,

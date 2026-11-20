@@ -152,8 +152,9 @@ fun About(
                     )
                     Spacer( Modifier.heightIn( 8.dp ) )
                     BasicText(
-                        text = "זמר",
-                        style = typography().xl.copy( color = colorPalette().text )
+                        text = "Music+",
+                        style = typography().xl.copy( color = colorPalette().text,
+                            textDirection = androidx.compose.ui.text.style.TextDirection.Ltr )
                     )
                     BasicText(
                         text = "גרסה ${getVersionName()}",
@@ -170,7 +171,7 @@ fun About(
                     )
                     Spacer( Modifier.heightIn( 12.dp ) )
                     BasicText(
-                        text = "זמר מבוסס על הקוד הפתוח של Kreate מאת knighthat, " +
+                        text = "Music+ מבוסס על הקוד הפתוח של Kreate מאת knighthat, " +
                                "ומופץ לפי רישיון GPL-3.0. קוד המקור של זמר פתוח לכולם.\n" +
                                "Zemer is a modified version of Kreate by knighthat, " +
                                "distributed under the GNU GPL v3.0. Zemer's source code is public.",

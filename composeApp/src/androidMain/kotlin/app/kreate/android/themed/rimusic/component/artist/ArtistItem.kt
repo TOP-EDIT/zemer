@@ -83,10 +83,12 @@ object ArtistItem: Visual(), MultiplatformItem {
         thumbnailUrl: String?,
         modifier: Modifier = Modifier,
         sizeDp: DpSize = thumbnailSize(),
-        showPlatformIcon: Boolean = true
+        showPlatformIcon: Boolean = true,
+        label: String? = null // Music+: letter tile
     ) =
         Thumbnail(
             url = thumbnailUrl,
+            label = label,
             contentScale = ContentScale.FillWidth,
             modifier = modifier.padding( bottom = VERTICAL_SPACING.dp ),
             sizeDp = sizeDp
@@ -159,7 +161,7 @@ object ArtistItem: Visual(), MultiplatformItem {
             widthDp = sizeDp.width,
             modifier = modifier,
             thumbnail = {
-                Thumbnail( artist.id, artist.thumbnailUrl, sizeDp = sizeDp )
+                Thumbnail( artist.id, artist.thumbnailUrl, sizeDp = sizeDp, label = artist.cleanName() )
             },
             firstLine = st@ {
                 val cleanedName = artist.cleanName()

@@ -307,9 +307,9 @@ fun Thumbnail(
                         */
 
                     } else {
-                        Image(
-                            painter = painterResource(R.drawable.ic_banner_foreground),
-                            colorFilter = ColorFilter.tint(colorPalette().accent),
+                        // Music+: a big tile in the artist's color with their first letter
+                        app.kreate.android.coil3.LetterTile.Tile(
+                            name = currentWindow.mediaItem.mediaMetadata.artist?.toString().orEmpty(),
                             modifier = Modifier
                                 .pointerInput(Unit) {
                                     detectTapGestures(
@@ -325,9 +325,7 @@ fun Thumbnail(
 
                                 }
                                 .fillMaxSize()
-                                .clip(thumbnailShape()),
-                            contentDescription = "Background Image",
-                            contentScale = ContentScale.Fit
+                                .clip(thumbnailShape())
                         )
                     }
 

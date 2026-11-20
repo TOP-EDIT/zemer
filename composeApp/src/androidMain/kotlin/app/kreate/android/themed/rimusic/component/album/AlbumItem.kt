@@ -143,10 +143,12 @@ object AlbumItem: Visual(), MultiplatformItem {
         albumId: String,
         thumbnailUrl: String?,
         modifier: Modifier = Modifier,
-        sizeDp: DpSize = thumbnailSize()
+        sizeDp: DpSize = thumbnailSize(),
+        label: String? = null // Music+: letter tile
     ) =
         Thumbnail(
             url = thumbnailUrl,
+            label = label,
             contentScale = ContentScale.FillWidth,
             modifier = modifier.padding( bottom = VERTICAL_SPACING.dp ),
             sizeDp = sizeDp
@@ -254,7 +256,7 @@ object AlbumItem: Visual(), MultiplatformItem {
             widthDp = sizeDp.width,
             modifier = modifier,
             thumbnail = {
-                Thumbnail( album.id, album.cleanThumbnailUrl(), sizeDp = sizeDp )
+                Thumbnail( album.id, album.cleanThumbnailUrl(), sizeDp = sizeDp, label = album.cleanAuthorsText().ifBlank { album.cleanTitle() } )
             },
             firstLine = {
                 Title(
@@ -311,7 +313,7 @@ object AlbumItem: Visual(), MultiplatformItem {
             heightDp = sizeDp.height,
             modifier = modifier,
             thumbnail = {
-                Thumbnail( album.id, album.cleanThumbnailUrl(), sizeDp = sizeDp )
+                Thumbnail( album.id, album.cleanThumbnailUrl(), sizeDp = sizeDp, label = album.cleanAuthorsText().ifBlank { album.cleanTitle() } )
             },
             firstLine = {
                 Title(

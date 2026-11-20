@@ -300,9 +300,9 @@ fun MiniPlayer(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.height( Dimensions.miniPlayerHeight )
             ) {
-                ImageFactory.AsyncImage(
-                    thumbnailUrl = mediaItem.mediaMetadata.artworkUri?.toString(),
-                    contentScale = ContentScale.FillHeight,
+                // Music+: the artist's colored letter tile instead of a picture
+                app.kreate.android.coil3.LetterTile.Tile(
+                    name = cleanPrefix( mediaItem.mediaMetadata.artist?.toString().orEmpty() ),
                     modifier = Modifier.clip( thumbnailShape() )
                                        .size( 48.dp )
                 )

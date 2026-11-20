@@ -139,10 +139,12 @@ object PlaylistItem: Visual(), MultiplatformItem {
         thumbnailUrl: String?,
         modifier: Modifier = Modifier,
         sizeDp: DpSize = thumbnailSize(),
-        showPlatformIcon: Boolean = true
+        showPlatformIcon: Boolean = true,
+        label: String? = null // Music+: playlist name -> letter tile
     ) =
         Thumbnail(
             url = thumbnailUrl,
+            label = label,
             contentScale = ContentScale.FillWidth,
             modifier = modifier.padding( bottom = VERTICAL_SPACING.dp ),
             sizeDp = sizeDp
@@ -182,13 +184,15 @@ object PlaylistItem: Visual(), MultiplatformItem {
         sizeDp: DpSize = thumbnailSize(),
         showPlatformIcon: Boolean = true,
         useRandom: Boolean = true,
+        label: String? = null, // Music+: playlist name -> letter tile instead of pictures
         thumbnailContent: @Composable BoxScope.() -> Unit = {}
     ) =
         Box(
             modifier = modifier.requiredSize( sizeDp )
                                .clip( thumbnailShape )
         ) {
-            BoxWithConstraints( Modifier.fillMaxSize() ) {
+            if( label != null ) app.kreate.android.coil3.LetterTile.Tile( label, Modifier.fillMaxSize() )
+            else BoxWithConstraints( Modifier.fillMaxSize() ) {
                 val indvModifier = remember( thumbnailUrls.size ) {
                     val (width, height) = with( thumbnailUrls.size ) {
                         if( this < 4 )
@@ -251,7 +255,7 @@ object PlaylistItem: Visual(), MultiplatformItem {
         }.collectAsState( emptySet(), Dispatchers.IO )
 
         Thumbnail(
-            playlist.browseId, thumbnails, modifier, sizeDp, showPlatformIcon, useRandom, thumbnailContent
+            playlist.browseId, thumbnails, modifier, sizeDp, showPlatformIcon, useRandom, playlist.name, thumbnailContent
         )
     }
 
@@ -373,7 +377,7 @@ object PlaylistItem: Visual(), MultiplatformItem {
             modifier = modifier,
             thumbnail = {
                 if( thumbnailUrl != null )
-                    Thumbnail( playlist.browseId, thumbnailUrl, Modifier, sizeDp, showPlatformIcon )
+                    Thumbnail( playlist.browseId, thumbnailUrl, Modifier, sizeDp, showPlatformIcon, playlist.name )
                 else
                     Thumbnail(
                         playlist = playlist,

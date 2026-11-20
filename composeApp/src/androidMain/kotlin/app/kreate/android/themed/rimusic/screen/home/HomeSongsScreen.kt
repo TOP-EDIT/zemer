@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -151,11 +152,37 @@ fun HomeSongsScreen(
         Column( Modifier.fillMaxSize() ) {
             // Sticky tab's title
             TabHeader( R.string.songs ) {
-                HeaderInfo( itemsOnDisplayState.size.toString(), R.drawable.musical_notes )
+                // Music+: songs hidden by "only male singers" are not counted
+                HeaderInfo(
+                    itemsOnDisplayState.count {
+                        !app.kreate.android.utils.MenOnly.blocked( it.cleanTitle(), it.cleanArtistsText() )
+                    }.toString(),
+                    R.drawable.musical_notes
+                )
             }
 
-            // Sticky tab's tool bar
-            TabToolBar.Buttons( buttons )
+            // Music+: two big buttons ("play all" / "shuffle"); the other tools sit under "⋯"
+            Row(
+                horizontalArrangement = Arrangement.spacedBy( 8.dp ),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding( horizontal = 12.dp, vertical = 6.dp ).fillMaxWidth()
+            ) {
+                app.kreate.android.themed.rimusic.component.BigActions.Pill(
+                    text = androidx.compose.ui.res.stringResource( R.string.musicplus_play_all ),
+                    iconId = R.drawable.play,
+                    filled = true,
+                    modifier = Modifier.weight( 1f )
+                ) { app.kreate.android.themed.rimusic.component.BigActions.playAll( getSongs() ) }
+                app.kreate.android.themed.rimusic.component.BigActions.Pill(
+                    text = androidx.compose.ui.res.stringResource( R.string.shuffle ),
+                    iconId = R.drawable.shuffle,
+                    filled = false,
+                    modifier = Modifier.weight( 1f )
+                ) { me.knighthat.component.tab.SongShuffler.playShuffled( getSongs() ) }
+                Box( Modifier.width( 104.dp ) ) {
+                    TabToolBar.Buttons( buttons.filter { it !== shuffle } )
+                }
+            }
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

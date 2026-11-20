@@ -567,6 +567,14 @@ class StatefulPlayerImpl(private val player: ExoPlayer) :
     }
 
     override fun onMediaItemTransition( mediaItem: MediaItem?, reason: Int ) {
+        // Music+: on a "men only" phone a female singer's song is never played
+        val md = mediaItem?.mediaMetadata
+        if( mediaItem != null && app.kreate.android.utils.MenOnly.blocked( md?.title?.toString(), md?.artist?.toString() ) ) {
+            if( player.hasNextMediaItem() ) player.seekToNextMediaItem()
+            else { player.pause(); player.stop() }
+            return
+        }
+
         normalizeLoudness()
 
         // Don't update [_currentMediaItemState] when on repeat

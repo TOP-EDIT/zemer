@@ -46,13 +46,19 @@ abstract class Visual {
         showThumbnail: Boolean = true,
         sizeDp: DpSize = thumbnailSize(),
         contentAlignment: Alignment = Alignment.TopStart,
+        label: String? = null, // Music+: artist name -> colored letter tile instead of a picture
         overlay: @Composable BoxScope.() -> Unit = {}
     ) =
         Box(
             contentAlignment = contentAlignment,
             modifier = modifier.requiredSize( sizeDp )
         ) {
-            if( showThumbnail )
+            if( showThumbnail && label != null )
+                app.kreate.android.coil3.LetterTile.Tile(
+                    name = label,
+                    modifier = Modifier.clip( thumbnailShape ).fillMaxSize()
+                )
+            else if( showThumbnail )
                 ImageFactory.AsyncImage(
                     thumbnailUrl = url,
                     contentScale = contentScale,

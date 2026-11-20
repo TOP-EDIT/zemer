@@ -44,29 +44,18 @@ fun HomeScreen(
         miniPlayer,
         navBarContent = { Item ->
             if ( Preferences.QUICK_PICKS_PAGE.value )
-                Item(0, stringResource(R.string.quick_picks), R.drawable.sparkles)
+                Item(0, stringResource(R.string.quick_picks), R.drawable.ic_home_tab)
+            // Music+: four clear tabs (home, songs, singers, lists). Albums stay reachable from
+            // a singer's page and from search, without their own tab.
             Item(1, stringResource(R.string.songs), R.drawable.musical_notes)
             Item(2, stringResource(R.string.artists), R.drawable.people)
-            Item(3, stringResource(R.string.albums), R.drawable.album)
             Item(4, stringResource(R.string.playlists), R.drawable.library)
         }
     ) { currentTabIndex ->
         saveableStateHolder.SaveableStateProvider(key = currentTabIndex) {
             when (currentTabIndex) {
-                0 -> HomeQuickPicks(
-                    onSearchClick = {
-                        NavRoutes.search.navigateHere( navController )
-                    },
-                    onMoodClick = { mood ->
-                        navController.currentBackStackEntry?.savedStateHandle?.set("mood", mood.toUiMood())
-                        NavRoutes.mood.navigateHere( navController )
-                    },
-                    onSettingsClick = {
-                        NavRoutes.settings.navigateHere( navController )
-                    },
-                    navController = navController
-
-                )
+                // Music+: our own home (greeting, search, colored cards, singers, recent songs)
+                0 -> app.kreate.android.themed.rimusic.screen.home.MusicPlusHome( navController )
 
                 1 -> HomeSongsScreen( navController )
 
