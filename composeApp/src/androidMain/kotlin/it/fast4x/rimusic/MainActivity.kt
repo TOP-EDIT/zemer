@@ -123,7 +123,6 @@ import it.fast4x.rimusic.ui.components.themed.CrossfadeContainer
 import it.fast4x.rimusic.ui.screens.AppNavigation
 import it.fast4x.rimusic.ui.screens.player.MiniPlayer
 import it.fast4x.rimusic.ui.screens.player.Player
-import it.fast4x.rimusic.ui.screens.player.components.YoutubePlayer
 import it.fast4x.rimusic.ui.screens.player.rememberPlayerSheetState
 import it.fast4x.rimusic.ui.styling.Appearance
 import it.fast4x.rimusic.ui.styling.Dimensions
@@ -199,6 +198,11 @@ MainActivity :
         }.onFailure {
             logger.e( it ) { "Failed to bind PlayerServiceModern" }
         }
+    }
+
+    // Zemer: keep layouts intact on phones with very large font / display zoom.
+    override fun attachBaseContext( newBase: Context ) {
+        super.attachBaseContext( app.kreate.android.utils.ZemerScale.wrap( newBase ) )
     }
 
     @ExperimentalTextApi
@@ -705,7 +709,7 @@ MainActivity :
                             LocalIndication provides ripple(bounded = true),
                             LocalRippleConfiguration provides rippleConfiguration,
                             LocalPlayerAwareWindowInsets provides playerAwareWindowInsets,
-                            LocalLayoutDirection provides LayoutDirection.Ltr,
+                            LocalLayoutDirection provides ( if( resources.configuration.layoutDirection == android.view.View.LAYOUT_DIRECTION_RTL ) LayoutDirection.Rtl else LayoutDirection.Ltr ), // Zemer: Hebrew right-to-left
                             LocalDownloadHelper provides MyDownloadHelper,
                             LocalPlayerSheetState provides playerState,
                             LocalMonetCompat provides monet,
@@ -753,24 +757,6 @@ MainActivity :
 
                             val thumbnailRoundness by Preferences.THUMBNAIL_BORDER_RADIUS
 
-                            val isVideo = player.currentMediaItem?.isVideo ?: false
-                            val isVideoEnabled by Preferences.PLAYER_ACTION_TOGGLE_VIDEO
-
-                            val youtubePlayer: @Composable () -> Unit = {
-                                player.currentMediaItem?.mediaId?.let {
-                                    YoutubePlayer(
-                                        ytVideoId = it,
-                                        lifecycleOwner = LocalLifecycleOwner.current,
-                                        onCurrentSecond = {},
-                                        showPlayer = showPlayer,
-                                        onSwitchToAudioPlayer = {
-                                            showPlayer = false
-                                            switchToAudioPlayer = true
-                                        }
-                                    )
-                                }
-                            }
-
                             PipEventContainer(
                                 enable = true,
                                 onPipOutAction = {
@@ -799,25 +785,6 @@ MainActivity :
                                 ) {
                                     Player( navController ) { showPlayer = false }
                                 }
-                            }
-
-                            CustomModalBottomSheet(
-                                showSheet = isVideo && isVideoEnabled && showPlayer,
-                                onDismissRequest = { showPlayer = false },
-                                containerColor = colorPalette().background0,
-                                contentColor = colorPalette().background0,
-                                modifier = Modifier.fillMaxWidth(),
-                                sheetState = playerState,
-                                dragHandle = {
-                                    Surface(
-                                        modifier = Modifier.padding(vertical = 0.dp),
-                                        color = colorPalette().background0,
-                                        shape = thumbnailShape()
-                                    ) {}
-                                },
-                                shape = thumbnailRoundness.shape
-                            ) {
-                                youtubePlayer()
                             }
 
                             val menuState = LocalMenuState.current

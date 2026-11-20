@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import it.fast4x.rimusic.utils.semiBold
 import it.fast4x.rimusic.typography
 
@@ -46,7 +47,9 @@ class TextIconButton(
                     fontFamily = typography().xs.semiBold.fontFamily,
                     color = color,
                 ),
-                maxLines = 2,
+                maxLines = 1,
+                softWrap = false,
+                autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased( minFontSize = 8.sp, maxFontSize = typography().xs.semiBold.fontSize, stepSize = 0.5.sp ),
                 overflow = TextOverflow.Ellipsis
             )
         }

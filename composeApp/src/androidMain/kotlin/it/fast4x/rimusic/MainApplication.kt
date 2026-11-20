@@ -22,9 +22,9 @@ import coil3.SingletonImageLoader
 import coil3.asImage
 import coil3.disk.DiskCache
 import coil3.memory.MemoryCache
-import coil3.network.ktor3.KtorNetworkFetcherFactory
 import coil3.request.crossfade
-import io.ktor.client.HttpClient
+import app.kreate.android.R
+import app.kreate.android.coil3.NoPictures
 import it.fast4x.rimusic.utils.AppLifecycleTracker
 import kotlinx.coroutines.Dispatchers
 import me.knighthat.innertube.Innertube
@@ -48,6 +48,15 @@ class MainApplication : Application(), SingletonImageLoader.Factory {
 
         setupLogging( koinLogger )
 
+        // Zemer: these settings make MainActivity restart when they change.
+        // Reading them writes their default the first time, which used to
+        // restart the screen (and stop the song) on the first play. Touch
+        // them here, before any screen listens.
+        Preferences.MAIN_THEME.value
+        Preferences.NAVIGATION_BAR_POSITION.value
+        Preferences.NAVIGATION_BAR_TYPE.value
+        Preferences.MINI_PLAYER_TYPE.value
+
         Innertube.setProvider( InnertubeProvider() )
 
         // Register network callback
@@ -68,32 +77,23 @@ class MainApplication : Application(), SingletonImageLoader.Factory {
     }
 
     override fun newImageLoader( context: PlatformContext ): ImageLoader {
-        val client: HttpClient by inject()
-        val diskCache: DiskCache by inject()
-        val memoryCache: MemoryCache by inject()
-        val appIcon = AppIcon.bitmap( context, THUMBNAIL_SIZE ).asImage()
-
-        // TODO: Add a toggle in setting that let user enable network caching
-        // This feature will set an expiration date on cache, forcing
-        // user to "re-fetch" the image data again after a period of time.
-        // This will potentially double the storage.
+        // Zemer: no pictures at all. No network fetcher, no disk cache,
+        // and every non built-in request is refused by [NoPictures].
+        val noPicture = androidx.core.content.ContextCompat
+            .getDrawable( context, R.drawable.no_picture )
+            ?.asImage()
         return ImageLoader.Builder(context)
                           .logger( CoilLogger() )
                           .coroutineContext( Dispatchers.IO )
                           .decoderCoroutineContext( Dispatchers.Default )
-                          .crossfade( true )
-                          .error( appIcon )
-                          .memoryCache( memoryCache )
-                          .diskCache {
-                              if( diskCache.maxSize > 1 )
-                                  diskCache
-                              else
-                                  null
-                          }
+                          .crossfade( false )
+                          .error( noPicture )
+                          .placeholder( noPicture )
+                          .fallback( noPicture )
+                          .memoryCache( null )
+                          .diskCache( null )
                           .components {
-                              add(
-                                  KtorNetworkFetcherFactory(client)
-                              )
+                              add( NoPictures( context ) )
                           }
                           .build()
     }

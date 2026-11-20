@@ -85,40 +85,10 @@ private fun verifyDoH( resolver: DnsOverHttps, addresses: List<InetAddress>, dom
     }.getOrDefault( false )
 
 actual val networkModule: Module = module {
-    factory<Proxy> {       // Recreate proxy instance every time it's called
-        if( !Preferences.IS_PROXY_ENABLED.value ) {
-            Logger.d( tag = LOGGING_TAG ) { "Proxy is not enabled" }
-            return@factory Proxy.NO_PROXY
-        }
-
-        val proxy = Proxy(
-            Preferences.PROXY_SCHEME.value,
-            InetSocketAddress(Preferences.PROXY_HOST.value, Preferences.PROXY_PORT.value)
-        )
-        // Must verify to prevent network failure
-        runBlocking( Dispatchers.IO ) { proxy.takeIf( ::verifyProxy ) ?: Proxy.NO_PROXY }
-    }
-    factory<Dns> {
-        if( Preferences.DOH_SERVER.value == DohServer.NONE ) {
-            Logger.d( tag = LOGGING_TAG ) { "DoH is not enabled. Using system's DNS" }
-            return@factory Dns.SYSTEM
-        }
-
-        val client = OkHttpClient.Builder().build()
-        val url = Preferences.DOH_SERVER.value.url!!        // Cannot be null if other than NONE
-        val addresses = Preferences.DOH_SERVER.value.address.map( InetAddress::getByName )
-
-        val dns = DnsOverHttps
-            .Builder()
-            .client( client )
-            .url( url )
-            .bootstrapDnsHosts( addresses )
-            .build()
-        // Must verify to prevent network failure
-        runBlocking( Dispatchers.IO ) {
-            dns.takeIf { verifyDoH(it, addresses) } ?: Dns.SYSTEM
-        }
-    }
+    // Zemer: always connect directly with the phone's own DNS, so the
+    // kosher filter on the phone always applies (no proxy, no DNS-over-HTTPS).
+    factory<Proxy> { Proxy.NO_PROXY }
+    factory<Dns> { Dns.SYSTEM }
 
     single {
         val interceptor = HttpLoggingInterceptor(OkHttpLogger())
@@ -136,6 +106,7 @@ actual val networkModule: Module = module {
                     .proxy( get() )
                     .dns( get() )
                     .addInterceptor( interceptor )
+                    .addInterceptor( app.kreate.android.coil3.PictureHostBlocker )
                     .build()
     }
     single {

@@ -543,7 +543,7 @@ class MediaLibrarySessionCallback(
                     .setTitle(cleanPrefix(title))
                     .setSubtitle(subtitle)
                     .setArtist(subtitle)
-                    .setArtworkUri(iconUri)
+                    .setArtworkUri( null ) // Zemer: no pictures
                     .setIsPlayable(false)
                     .setIsBrowsable(true)
                     .setMediaType(mediaType)

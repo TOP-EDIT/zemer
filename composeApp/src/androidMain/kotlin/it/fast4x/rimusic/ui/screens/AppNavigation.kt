@@ -445,7 +445,7 @@ fun AppNavigation(
     }
     crashReportDialog.Render()
 
-    if( Preferences.SEEN_CHANGELOGS_VERSION.value != BuildConfig.VERSION_NAME ) {
+    if( false ) { // Zemer: the upstream "maintenance mode" notice does not apply
         val changelogs = remember {
             object: me.knighthat.component.dialog.Dialog {
                 override val dialogTitle: String

@@ -31,69 +31,34 @@ import it.fast4x.rimusic.ui.components.themed.Button
 import it.fast4x.rimusic.utils.semiBold
 import me.knighthat.utils.Toaster
 
-private fun appIconClickAction(
-    navController: NavController,
-    countToReveal: MutableIntState,
-    context: Context
-) {
-    countToReveal.intValue++
-
-    val message: String =
-        when( countToReveal.intValue ) {
-            10 -> {
-                countToReveal.intValue = 0
-                NavRoutes.gamePacman.navigateHere( navController )
-                ""
-            }
-            3 -> "Do you like clicking? Then continue..."
-            6 -> "Okay, you’re looking for something, keep..."
-            9 -> "You are a number one, click and enjoy the surprise"
-            else -> ""
-        }
-    if( message.isNotEmpty() )
-        Toaster.n( message, Toast.LENGTH_LONG )
-}
-
-private fun appIconLongClickAction(
-    navController: NavController,
-    context: Context
-) {
-    Toaster.n( "You are a number one, click and enjoy the surprise", Toast.LENGTH_LONG )
-    NavRoutes.gameSnake.navigateHere( navController )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppLogo(
     navController: NavController,
     context: Context
 ) {
-    val countToReveal = remember { mutableIntStateOf(0) }
-    val modifier = Modifier.combinedClickable(
-        onClick = { appIconClickAction( navController, countToReveal, context ) },
-        onLongClick = { appIconLongClickAction( navController, context ) }
-    )
-
     Image(
         bitmap = AppIcon.Round.imageBitmap( LocalContext.current ),
-        contentDescription = "App's icon",
-        modifier = modifier.size( 36.dp )
+        contentDescription = null,
+        modifier = Modifier.size( 34.dp )
     )
 }
 
+// Zemer: the app name as text, never cut, follows the theme color.
 @Composable
 private fun AppLogoText( navController: NavController ) {
-    Button(
-        iconId = R.drawable.app_logo_text,
-        color = AppBar.contentColor(),
-        padding = 0.dp,
-        size = 36.dp,
-        forceWidth = 100.dp,
+    BasicText(
+        text = "זמר",
+        maxLines = 1,
+        softWrap = false,
+        style = TextStyle(
+            fontSize = typography().l.fontSize,
+            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+            fontFamily = typography().l.fontFamily,
+            color = AppBar.contentColor()
+        ),
         modifier = Modifier.clickable {
             if ( NavRoutes.home.isHere( navController ) ) return@clickable
 
-            // In short, navigates to [NavRoutes.home] then previous stacks
-            // effectively make it the start again
             navController.navigate( NavRoutes.home.name ) {
                 popUpTo( navController.graph.findStartDestination().id ) {
                     inclusive = true
@@ -102,7 +67,7 @@ private fun AppLogoText( navController: NavController ) {
                 launchSingleTop = true
             }
         }
-    ).Draw()
+    )
 }
 
 // START

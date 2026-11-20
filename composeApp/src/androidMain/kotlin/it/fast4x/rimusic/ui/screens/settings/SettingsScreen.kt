@@ -82,9 +82,9 @@ fun SettingsScreen(
             else
                 item(3, stringResource(R.string.quick_picks), R.drawable.sparkles)
             item(4, stringResource(R.string.tab_data), R.drawable.server)
-            item(5, stringResource(R.string.tab_accounts), R.drawable.person)
+            // Zemer: no account login (web pages with pictures), no Discord,
+            // no proxy / DNS-over-HTTPS (they would bypass the kosher filter).
             item(6, stringResource(R.string.tab_miscellaneous), R.drawable.equalizer)
-            item(7, stringResource( R.string.tab_network ), R.drawable.swap_vertical_outline)
             item(8, stringResource(R.string.about), R.drawable.information)
 
         }
@@ -96,9 +96,7 @@ fun SettingsScreen(
                 2 -> AppearanceSettings( paddingValues )
                 3 -> QuickPicksSettings( paddingValues )
                 4 -> DataSettings( paddingValues )
-                5 -> AccountSettings( paddingValues )
                 6 -> OtherSettings( paddingValues )
-                7 -> NetworkSettings( paddingValues )
                 8 -> About( navController, paddingValues )
             }
         }

@@ -134,68 +134,49 @@ fun About(
     ) {
         search.ToolBarButton()
 
-        Row(
-            horizontalArrangement = if( UiType.ViMusic.isCurrent() ) Arrangement.End else Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding( horizontal = SettingComponents.HORIZONTAL_PADDING.dp )
-                               .fillMaxWidth()
-                               .wrapContentHeight()
-        ) {
-            BasicText(
-                text = "v${getVersionName()} by ",
-                style = typography().s.secondary,
-            )
-            Row(
-                Modifier.clickable {
-                    val url = "${Repository.GITHUB}/${Repository.OWNER}"
-                    uriHandler.openUri( url )
-                }
-            ) {
-                Image(
-                    painter = painterResource( R.drawable.github_logo ),
-                    contentDescription = null
-                )
-                BasicText(
-                    text = Repository.OWNER,
-                    style = typography().s.secondary.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    modifier = Modifier.align( Alignment.CenterVertically )
-                )
-            }
-        }
-
         LazyColumn(
             state = scrollState,
             contentPadding = PaddingValues(bottom = Dimensions.bottomSpacer)
         ) {
-            // Social platforms
+            // Zemer: who we are, and credit to the original project (GPL-3.0)
             item {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth( .9f )
-                                       .padding( top = 10.dp )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                                       .padding( horizontal = SettingComponents.HORIZONTAL_PADDING.dp, vertical = 16.dp )
                 ) {
-                    // [Icon] overrides vector's color at render time.
-                    // Using [Image] to retain original color(s)
                     Image(
-                        painter = painterResource( R.drawable.discord_logo ),
-                        contentDescription = "Discord server",
-                        modifier = Modifier.size( TabToolBar.TOOLBAR_ICON_SIZE )
-                                           .clickable( null, ripple(false) ) {
-                                               uriHandler.openUri( "https://discord.gg/WYr9ZgJzpx" )
-                                           }
+                        bitmap = app.kreate.android.drawable.AppIcon.Round.imageBitmap( context ),
+                        contentDescription = null,
+                        modifier = Modifier.size( 72.dp )
                     )
-
-                    Spacer( Modifier.width( 15.dp ) )
-
-                    Image(
-                        painter = painterResource( R.drawable.github_logo ),
-                        contentDescription = "Github discussion board",
-                        modifier = Modifier.size( TabToolBar.TOOLBAR_ICON_SIZE )
-                                           .clickable( null, ripple(false) ) {
-                                               uriHandler.openUri( "${Repository.REPO_URL}/discussions" )
-                                           }
+                    Spacer( Modifier.heightIn( 8.dp ) )
+                    BasicText(
+                        text = "זמר",
+                        style = typography().xl.copy( color = colorPalette().text )
+                    )
+                    BasicText(
+                        text = "גרסה ${getVersionName()}",
+                        style = typography().s.secondary
+                    )
+                    Spacer( Modifier.heightIn( 12.dp ) )
+                    BasicText(
+                        text = "נגן מוזיקה בלי תמונות ובלי וידאו, של KosherSafe.\n" +
+                               "Music player without pictures or video, by KosherSafe.",
+                        style = typography().s.copy(
+                            color = colorPalette().text,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    )
+                    Spacer( Modifier.heightIn( 12.dp ) )
+                    BasicText(
+                        text = "זמר מבוסס על הקוד הפתוח של Kreate מאת knighthat, " +
+                               "ומופץ לפי רישיון GPL-3.0. קוד המקור של זמר פתוח לכולם.\n" +
+                               "Zemer is a modified version of Kreate by knighthat, " +
+                               "distributed under the GNU GPL v3.0. Zemer's source code is public.",
+                        style = typography().xs.secondary.copy(
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
                     )
                 }
             }
@@ -204,7 +185,7 @@ fun About(
             entry( search, R.string.view_the_source_code ) {
                 SettingComponents.Text(
                     title = stringResource( R.string.view_the_source_code ),
-                    subtitle = stringResource( R.string.you_will_be_redirected_to_github ),
+                    subtitle = Repository.REPO_URL,
                     onClick = {
                         uriHandler.openUri( Repository.REPO_URL )
                     }
@@ -212,42 +193,17 @@ fun About(
             }
             entry( search, R.string.word_documentation ) {
                 SettingComponents.Text(
-                    title = stringResource( R.string.word_documentation ),
-                    subtitle = stringResource( R.string.opens_link_in_web_browser ),
+                    title = "Kreate (המקור / original)",
+                    subtitle = Repository.UPSTREAM_URL,
                     onClick = {
-                        uriHandler.openUri( "https://kreate.knighthat.me" )
-                    }
-                )
-            }
-            entry( search, R.string.report_an_issue ) {
-                SettingComponents.Text(
-                    title = stringResource( R.string.report_an_issue ),
-                    subtitle = stringResource( R.string.you_will_be_redirected_to_github ),
-                    onClick = {
-                        uriHandler.openUri(
-                            with(Repository ) {
-                                "$REPO_URL$ISSUE_TEMPLATE_PATH"
-                            }
-                        )
-                    }
-                )
-            }
-            entry( search, R.string.request_a_feature_or_suggest_an_idea ) {
-                SettingComponents.Text(
-                    title = stringResource( R.string.request_a_feature_or_suggest_an_idea ),
-                    subtitle = stringResource( R.string.you_will_be_redirected_to_github ),
-                    onClick = {
-                        uriHandler.openUri(
-                            with(Repository ) {
-                                "$REPO_URL$FEATURE_REQUEST_TEMPLATE_PATH"
-                            }
-                        )
+                        uriHandler.openUri( Repository.UPSTREAM_URL )
                     }
                 )
             }
             entry( search, R.string.word_licenses ) {
                 SettingComponents.Text(
                     title = stringResource( R.string.word_licenses ),
+                    subtitle = "GNU GPL v3.0",
                     onClick = { NavRoutes.LICENSES.navigateHere( navController ) },
                 )
             }

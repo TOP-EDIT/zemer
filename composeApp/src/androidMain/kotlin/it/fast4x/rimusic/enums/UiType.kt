@@ -15,7 +15,7 @@ enum class UiType: TextView {
 
     override val text: String
         @Composable
-        get() = this.name
+        get() = when( this ) { RiMusic -> "סגנון א׳ / Style A"; ViMusic -> "סגנון ב׳ / Style B" }
 
     fun isCurrent(): Boolean = current() == this
 

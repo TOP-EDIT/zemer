@@ -31,30 +31,15 @@ class CoilBitmapLoader(
 
     override fun decodeBitmap(data: ByteArray): ListenableFuture<Bitmap> =
         scope.future(Dispatchers.IO) {
-            BitmapFactory.decodeByteArray(data, 0, data.size) ?: error("Could not decode image data")
+            error("Pictures are disabled")
         }
 
     override fun loadBitmap(uri: Uri): ListenableFuture<Bitmap> =
-        scope.future( Dispatchers.Main ) {
-            val imageLoader = context.imageLoader
-            val request = ImageFactory.requestBuilder( uri.toString() ) {
-                bitmapConfig( Bitmap.Config.ARGB_8888 )
-                allowHardware( false )
-                size( ImageFactory.THUMBNAIL_SIZE )
-            }
-            val result = imageLoader.execute( request )
-
-            return@future result.image?.toBitmap()?.copy( Bitmap.Config.ARGB_8888, false )
-                ?: throw IllegalStateException( "failed to load bitmap from $uri" )
+        scope.future( Dispatchers.IO ) {
+            error( "Pictures are disabled" )
         }
 
-    // Prioritize loadBitmap (uses coil3) to get image rather than
-    // decoding image from Media3
-    override fun loadBitmapFromMetadata( metadata: MediaMetadata ): ListenableFuture<Bitmap>? =
-        if ( metadata.artworkUri != null )
-            loadBitmap( metadata.artworkUri!! )
-        else if ( metadata.artworkData != null )
-            decodeBitmap( metadata.artworkData!! )
-        else
-            null
+    // Zemer: no pictures. Never load or decode artwork for the
+    // notification, lock screen, Bluetooth or Android Auto.
+    override fun loadBitmapFromMetadata( metadata: MediaMetadata ): ListenableFuture<Bitmap>? = null
 }

@@ -180,9 +180,10 @@ class HorizontalNavigationBar(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxSize()
-                            .horizontalScroll(scrollState),
-                        content = { buttonList().forEach { it() } }
+                            .fillMaxSize(),
+                        // Zemer: every tab gets an equal share of the width and its
+                        // label shrinks to fit, so nothing is cut on big fonts.
+                        content = { buttonList().forEach { Box( Modifier.weight( 1f ) ) { it() } } }
                     )
                 }
 

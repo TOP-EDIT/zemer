@@ -74,7 +74,7 @@ val Innertube.Podcast.EpisodeItem.asMediaItem: MediaItem
                 .setDisplayTitle( title )
                 .setArtist(author.toString())
                 .setAlbumTitle(title)
-                .setArtworkUri(thumbnail.firstOrNull()?.url?.toUri())
+                .setArtworkUri( null ) // Zemer: no pictures
                 .setDurationMs( durationString.toDuration().inWholeMilliseconds )
                 .setMediaType( MediaMetadata.MEDIA_TYPE_PODCAST_EPISODE )
                 .setIsBrowsable( false )
@@ -101,7 +101,7 @@ val Innertube.SongItem.asMediaItem: MediaItem
                 .setDisplayTitle( info?.name )
                 .setArtist(authors?.filter {it.name?.matches(Regex("\\s*([,&])\\s*")) == false }?.joinToString(", ") { it.name ?: "" })
                 .setAlbumTitle(album?.name)
-                .setArtworkUri(thumbnail?.url?.toUri())
+                .setArtworkUri( null ) // Zemer: no pictures
                 .setDurationMs( durationText.toDuration().inWholeMilliseconds )
                 .setMediaType( MediaMetadata.MEDIA_TYPE_MUSIC )
                 .setIsBrowsable( false )
@@ -143,7 +143,7 @@ val Innertube.VideoItem.asMediaItem: MediaItem
                 .setTitle(info?.name)
                 .setDisplayTitle( info?.name )
                 .setArtist(authors?.joinToString(", ") { it.name ?: "" })
-                .setArtworkUri(thumbnail?.url?.toUri())
+                .setArtworkUri( null ) // Zemer: no pictures
                 .setDurationMs( durationText.toDuration().inWholeMilliseconds )
                 .setMediaType( MediaMetadata.MEDIA_TYPE_MUSIC )
                 .setIsBrowsable( false )
@@ -174,7 +174,7 @@ val Song.asMediaItem: MediaItem
                 .setDisplayTitle( cleanTitle() )
                 .setArtist( cleanArtistsText() )
                 .setArtworkUri(
-                    cleanThumbnailUrl()?.thumbnail( THUMBNAIL_SIZE )?.toUri()
+                    null // Zemer: no pictures
                 )
                 .setDurationMs( durationText.toDuration().inWholeMilliseconds )
                 .setMediaType( MediaMetadata.MEDIA_TYPE_MUSIC )

@@ -7,8 +7,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Properties
 
-val APP_NAME = "Kreate"
+val APP_NAME = "Zemer"
 
 private fun String.sha256(): String {
     val digest = MessageDigest.getInstance( "SHA-256" )
@@ -22,7 +23,8 @@ private fun String.sha256(): String {
 // Only official build env has passwords and keystore to sign the APK
 // Other build environments can have unsigned version instead
 val officialBuildPhrase: String? = System.getenv( "OFFICIAL_BUILD_PASSPHRASE" )
-val isOfficialBuildEnv = !officialBuildPhrase.isNullOrBlank() && officialBuildPhrase.sha256() == "b2c778240e03b2005d23899aa02e51de049223a54d549d082e89dc20e51dd545"
+val zemerKeystore: File = rootProject.file( ".ignore.d/keystores/zemer.jks" )
+val isOfficialBuildEnv =!officialBuildPhrase.isNullOrBlank() && officialBuildPhrase.sha256() == "b2c778240e03b2005d23899aa02e51de049223a54d549d082e89dc20e51dd545"
 
 plugins {
     // Multiplatform
@@ -72,6 +74,7 @@ kotlin {
 
             implementation(libs.material.icons.desktop.ext)
             implementation(libs.vlcj)
+            implementation( libs.coil3.network.ktor )
         }
         androidMain.dependencies {
             implementation(projects.innertubex)
@@ -94,7 +97,7 @@ kotlin {
             implementation( libs.media3.exoplayer )
             implementation(libs.media3.session)
             implementation( libs.media3.datasource.okhttp )
-            implementation( libs.androidyoutubeplayer )
+            // Zemer: video player removed
 
             implementation( libs.toasty )
 
@@ -127,7 +130,7 @@ kotlin {
 
             //coil3 mp
             implementation( libs.coil3.compose )
-            implementation( libs.coil3.network.ktor )
+            // Zemer: no network image fetcher on Android (moved to desktop only)
 
             implementation(libs.translator)
 
@@ -182,7 +185,7 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "me.knighthat.kreate"
+        applicationId = "il.co.koshersafe.music"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
 
@@ -195,6 +198,17 @@ android {
     namespace = "app.kreate.android"
 
     signingConfigs {
+        // Zemer release key. Lives only on the build machine (.ignore.d is not
+        // committed). keystore.properties holds storePassword/keyPassword.
+        create( "zemer" ) {
+            val props = Properties()
+            val propsFile = file( "$rootDir/.ignore.d/keystores/keystore.properties" )
+            if( propsFile.exists() ) propsFile.inputStream().use { props.load( it ) }
+            storeFile = zemerKeystore
+            keyAlias = "zemer"
+            storePassword = props.getProperty( "storePassword" )
+            keyPassword = props.getProperty( "keyPassword" )
+        }
         create( "production" ) {
             storeFile = file("$rootDir/.ignore.d/keystores/production.jks")
             keyAlias = "kreate"
@@ -241,13 +255,13 @@ android {
         create("github") {
             dimension = "platform"
 
-            isDefault = true
+            // Zemer: not used (has a GitHub self-updater). We build "fdroid".
         }
         create( "fdroid" ) {
             dimension = "platform"
 
             // App's properties
-            versionNameSuffix = "-fdroid"
+            isDefault = true // Zemer: no self-updater; updates come from the KosherSafe store
         }
         create( "izzy" ) {
             dimension = "platform"
@@ -321,13 +335,13 @@ android {
 
             isDefault = true
 
-            if( isOfficialBuildEnv )
+            if( zemerKeystore.exists() )
                 // Singing config
-                signingConfig = signingConfigs.getByName( "production" )
+                signingConfig = signingConfigs.getByName( "zemer" )
 
             // App's properties
             versionName = libs.versions.versionName.get()
-            manifestPlaceholders["appName"] = APP_NAME
+            manifestPlaceholders["appName"] = "זמר"
             versionCode = vCode
         }
         //</editor-fold>

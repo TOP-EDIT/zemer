@@ -38,12 +38,6 @@ fun LazyListScope.playerActionBarSection( search: SettingEntrySearch, isLandscap
             R.string.swipe_up_to_open_the_queue
         )
     }
-    entry( search, R.string.action_bar_show_video_button ) {
-        SettingComponents.BooleanEntry(
-            Preferences.PLAYER_ACTION_TOGGLE_VIDEO,
-            R.string.action_bar_show_video_button
-        )
-    }
     entry( search, R.string.action_bar_show_discover_button ) {
         SettingComponents.BooleanEntry(
             Preferences.PLAYER_ACTION_DISCOVER,

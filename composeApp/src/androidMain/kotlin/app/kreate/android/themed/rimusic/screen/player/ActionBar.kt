@@ -430,7 +430,7 @@ fun BoxScope.ActionBar(
                     .padding(horizontal = 12.dp)
                     .fillMaxWidth()
             ) {
-                val showButtonPlayerVideo by Preferences.PLAYER_ACTION_TOGGLE_VIDEO
+                val showButtonPlayerVideo = false
                 if (showButtonPlayerVideo)
                     IconButton(
                         icon = R.drawable.video,

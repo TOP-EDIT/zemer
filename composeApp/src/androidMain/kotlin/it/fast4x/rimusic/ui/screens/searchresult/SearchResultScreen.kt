@@ -99,7 +99,7 @@ fun SearchResultScreen(
 
     val hapticFeedback = LocalHapticFeedback.current
 
-    val isVideoEnabled by Preferences.PLAYER_ACTION_TOGGLE_VIDEO
+    val isVideoEnabled = false
     val parentalControlEnabled by Preferences.PARENTAL_CONTROL
 
     val headerContent: @Composable (textButton: (@Composable () -> Unit)?) -> Unit = {
@@ -134,10 +134,10 @@ fun SearchResultScreen(
             item(0, stringResource(R.string.songs), R.drawable.musical_notes)
             item(1, stringResource(R.string.albums), R.drawable.album)
             item(2, stringResource(R.string.artists), R.drawable.artist)
-            item(3, stringResource(R.string.videos), R.drawable.video)
+            // Zemer: no "videos" tab
             item(4, stringResource(R.string.playlists), R.drawable.playlist)
             item(5, stringResource(R.string.featured), R.drawable.featured_playlist)
-            item(6, stringResource(R.string.podcasts), R.drawable.podcast)
+            // Zemer: no "podcasts" tab
         }
     ) { currentTabIndex ->
         saveableStateHolder.SaveableStateProvider(currentTabIndex) {

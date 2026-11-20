@@ -38,7 +38,7 @@ val InnertubeSong.toMediaItem: MediaItem
                                       .setTitle( name )
                                       .setArtist( artistsText )
                                       .setAlbumTitle( album?.text )
-                                      .setArtworkUri( thumbnails.firstOrNull()?.url?.toUri() )
+                                      .setArtworkUri( null ) // Zemer: no pictures
                                       .setExtras(
                                           bundleOf(
                                               "albumId" to album?.navigationEndpoint?.browseEndpoint?.browseId,

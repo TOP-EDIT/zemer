@@ -65,7 +65,7 @@ fun SearchYoutubeEntity (
             modifier = Modifier.padding(bottom = 12.dp)
         )
     }
-    val isVideoEnabled by Preferences.PLAYER_ACTION_TOGGLE_VIDEO
+    val isVideoEnabled = false
 
     Box(
         modifier = Modifier

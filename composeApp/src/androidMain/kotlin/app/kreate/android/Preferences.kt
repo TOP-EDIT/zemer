@@ -286,7 +286,7 @@ sealed class Preferences<T>(
             Enum( preferences, Key.PLAYER_PLAY_BUTTON_TYPE, "playerPlayButtonType", PlayerPlayButtonType.Disabled )
         }
         val PLAYER_BACKGROUND by lazy {
-            Enum( preferences, Key.PLAYER_BACKGROUND, "playerBackgroundColors", PlayerBackgroundColors.BlurredCoverColor )
+            Enum( preferences, Key.PLAYER_BACKGROUND, "playerBackgroundColors", PlayerBackgroundColors.ThemeColorGradient )
         }
         val PLAYER_THUMBNAIL_TYPE by lazy {
             Enum( preferences, Key.PLAYER_THUMBNAIL_TYPE, "coverThumbnailAnimation", ThumbnailCoverType.Vinyl )
@@ -837,7 +837,7 @@ sealed class Preferences<T>(
             Enum( preferences, Key.MAIN_THEME, "UiType", UiType.RiMusic )
         }
         val COLOR_PALETTE by lazy {
-            Enum( preferences, Key.COLOR_PALETTE, "colorPaletteName", ColorPaletteName.Dynamic )
+            Enum( preferences, Key.COLOR_PALETTE, "colorPaletteName", ColorPaletteName.Default )
         }
         val THEME_MODE by lazy {
             Enum( preferences, Key.THEME_MODE, "colorPaletteMode", ColorPaletteMode.Dark )

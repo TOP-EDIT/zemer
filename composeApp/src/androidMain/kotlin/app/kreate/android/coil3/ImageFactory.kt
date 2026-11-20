@@ -55,9 +55,9 @@ object ImageFactory : KoinComponent {
         ImageRequest.Builder( context )
                     .data( thumbnailUrl.thumbnail( THUMBNAIL_SIZE ) )
                     .diskCacheKey( thumbnailUrl )
-                    .placeholder( R.drawable.loader )
-                    .error( R.drawable.noimage )
-                    .fallback( R.drawable.image )
+                    .placeholder( R.drawable.no_picture )
+                    .error( R.drawable.no_picture )
+                    .fallback( R.drawable.no_picture )
                     .apply( builder )
                     .build()
 
@@ -69,12 +69,11 @@ object ImageFactory : KoinComponent {
         contentScale: ContentScale = ContentScale.FillBounds,
         transformations: List<Transformation> = emptyList()
     ) =
-        coil3.compose.AsyncImage(
-            model = requestBuilder( thumbnailUrl ){
-                transformations( transformations )
-            },
+        // Zemer: never loads anything, always the local neutral placeholder.
+        androidx.compose.foundation.Image(
+            painter = androidx.compose.ui.res.painterResource( R.drawable.no_picture ),
             contentDescription = contentDescription,
-            contentScale = contentScale,
+            contentScale = ContentScale.Fit,
             modifier = modifier
         )
 
